@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface Habit {
@@ -27,32 +26,30 @@ const SECTION_ICONS = {
 };
 
 const SECTION_COLORS = {
-  morning: 'bg-morning-light border-morning',
-  afternoon: 'bg-afternoon-light border-afternoon',
-  night: 'bg-night-light border-night'
+  morning: 'bg-morning-light',
+  afternoon: 'bg-afternoon-light',
+  night: 'bg-night-light'
+};
+
+const SECTION_GRID_COLORS = {
+  morning: 'bg-morning',
+  afternoon: 'bg-afternoon',
+  night: 'bg-night'
 };
 
 export function HabitGrid({ habits, onToggleHabit }: HabitGridProps) {
-  const [currentDate, setCurrentDate] = useState(new Date());
+  const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
   
-  const currentMonth = currentDate.getMonth();
-  const currentYear = currentDate.getFullYear();
-  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-  
-  const navigateMonth = (direction: 'prev' | 'next') => {
-    setCurrentDate(prev => {
-      const newDate = new Date(prev);
-      if (direction === 'prev') {
-        newDate.setMonth(prev.getMonth() - 1);
-      } else {
-        newDate.setMonth(prev.getMonth() + 1);
-      }
-      return newDate;
-    });
+  const navigateYear = (direction: 'prev' | 'next') => {
+    setCurrentYear(prev => direction === 'prev' ? prev - 1 : prev + 1);
   };
 
-  const formatDate = (day: number) => {
-    return `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+  const formatDate = (month: number, day: number) => {
+    return `${currentYear}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+  };
+
+  const getDaysInMonth = (month: number) => {
+    return new Date(currentYear, month + 1, 0).getDate();
   };
 
   const groupedHabits = habits.reduce((acc, habit) => {
@@ -64,44 +61,30 @@ export function HabitGrid({ habits, onToggleHabit }: HabitGridProps) {
   }, {} as Record<string, Habit[]>);
 
   return (
-    <div className="w-full max-w-7xl mx-auto p-6 space-y-8">
+    <div className="w-full max-w-full mx-auto p-6 bg-background">
       {/* Header */}
-      <div className="text-center">
-        <h1 className="text-6xl font-bold tracking-tight text-foreground mb-8">
+      <div className="text-center mb-8">
+        <h1 className="text-5xl font-bold tracking-wider text-foreground mb-6 font-serif">
           HABITS
         </h1>
         
-        {/* Month Navigation */}
+        {/* Year Navigation */}
         <div className="flex items-center justify-center gap-4 mb-8">
           <Button 
             variant="ghost" 
             size="sm"
-            onClick={() => navigateMonth('prev')}
+            onClick={() => navigateYear('prev')}
             className="h-8 w-8 p-0"
           >
             <ChevronLeft className="h-4 w-4" />
           </Button>
           
-          <div className="flex gap-6 text-sm font-medium text-muted-foreground">
-            {MONTHS.map((month, index) => (
-              <button
-                key={month}
-                onClick={() => setCurrentDate(new Date(currentYear, index, 1))}
-                className={`px-2 py-1 rounded transition-colors ${
-                  index === currentMonth 
-                    ? 'bg-primary text-primary-foreground' 
-                    : 'hover:bg-muted'
-                }`}
-              >
-                {month}
-              </button>
-            ))}
-          </div>
+          <span className="text-2xl font-bold text-primary px-6">{currentYear}</span>
           
           <Button 
             variant="ghost" 
             size="sm"
-            onClick={() => navigateMonth('next')}
+            onClick={() => navigateYear('next')}
             className="h-8 w-8 p-0"
           >
             <ChevronRight className="h-4 w-4" />
@@ -109,53 +92,90 @@ export function HabitGrid({ habits, onToggleHabit }: HabitGridProps) {
         </div>
       </div>
 
-      {/* Habit Sections */}
-      <div className="space-y-6">
-        {Object.entries(groupedHabits).map(([section, sectionHabits]) => (
-          <Card key={section} className={`p-6 border-2 ${SECTION_COLORS[section as keyof typeof SECTION_COLORS]}`}>
-            <div className="mb-4">
-              <h2 className="text-lg font-medium text-foreground flex items-center gap-2">
-                <span className="text-xl">{SECTION_ICONS[section as keyof typeof SECTION_ICONS]}</span>
-                {section}.
-              </h2>
-            </div>
-            
-            <div className="space-y-3">
+      {/* Month Headers */}
+      <div className="overflow-x-auto">
+        <div className="min-w-[1200px]">
+          <div className="grid grid-cols-[200px_repeat(12,_1fr)] gap-px bg-border border border-border">
+            <div className="bg-background p-2"></div>
+            {MONTHS.map((month, index) => (
+              <div key={month} className="bg-background p-2 text-center text-sm font-medium text-foreground border-r border-border">
+                {month}
+              </div>
+            ))}
+          </div>
+          
+          {/* Day Headers */}
+          <div className="grid grid-cols-[200px_repeat(12,_1fr)] gap-px bg-border">
+            <div className="bg-background p-1"></div>
+            {MONTHS.map((_, monthIndex) => (
+              <div key={monthIndex} className="bg-background border-r border-border">
+                <div className="grid grid-cols-5 gap-px text-[10px] text-muted-foreground text-center">
+                  {Array.from({ length: Math.min(31, getDaysInMonth(monthIndex)) }, (_, dayIndex) => {
+                    if ((dayIndex + 1) % 5 === 1 || dayIndex + 1 === 1 || dayIndex + 1 === 10 || dayIndex + 1 === 15 || dayIndex + 1 === 20 || dayIndex + 1 === 25 || dayIndex + 1 === 30) {
+                      return (
+                        <div key={dayIndex} className="p-[2px]">
+                          {dayIndex + 1}
+                        </div>
+                      );
+                    }
+                    return <div key={dayIndex} className="p-[2px]"></div>;
+                  })}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Habit Sections */}
+          {Object.entries(groupedHabits).map(([section, sectionHabits]) => (
+            <div key={section} className="border-t-2 border-border">
+              {/* Section Header */}
+              <div className="grid grid-cols-[200px_repeat(12,_1fr)] gap-px bg-border">
+                <div className={`${SECTION_COLORS[section as keyof typeof SECTION_COLORS]} p-3 flex items-center gap-2 border-r border-border`}>
+                  <span className="text-lg">{SECTION_ICONS[section as keyof typeof SECTION_ICONS]}</span>
+                  <span className="text-sm font-medium text-foreground">{section}.</span>
+                </div>
+                {MONTHS.map((_, monthIndex) => (
+                  <div key={monthIndex} className={`${SECTION_COLORS[section as keyof typeof SECTION_COLORS]} border-r border-border`}></div>
+                ))}
+              </div>
+              
+              {/* Habits */}
               {sectionHabits.map((habit) => (
-                <div key={habit.id} className="flex items-center gap-4">
-                  <div className="w-32 text-sm font-medium text-foreground">
+                <div key={habit.id} className="grid grid-cols-[200px_repeat(12,_1fr)] gap-px bg-border border-b border-border">
+                  <div className="bg-background p-2 text-sm font-medium text-foreground border-r border-border flex items-center">
                     {habit.name}
                   </div>
-                  
-                  <div className="flex gap-1">
-                    {Array.from({ length: daysInMonth }, (_, i) => {
-                      const day = i + 1;
-                      const dateKey = formatDate(day);
-                      const isCompleted = habit.completions[dateKey] || false;
-                      
-                      return (
-                        <button
-                          key={day}
-                          onClick={() => onToggleHabit(habit.id, dateKey)}
-                          className={`
-                            w-6 h-6 text-xs font-medium rounded border-2 transition-all duration-200
-                            hover:scale-110 hover:shadow-sm
-                            ${isCompleted 
-                              ? `${SECTION_COLORS[habit.section].replace('light', 'DEFAULT')} text-foreground` 
-                              : 'bg-empty border-border hover:bg-muted'
-                            }
-                          `}
-                        >
-                          {day}
-                        </button>
-                      );
-                    })}
-                  </div>
+                  {MONTHS.map((_, monthIndex) => (
+                    <div key={monthIndex} className="bg-background border-r border-border p-1">
+                      <div className="grid grid-cols-5 gap-[1px]">
+                        {Array.from({ length: getDaysInMonth(monthIndex) }, (_, dayIndex) => {
+                          const day = dayIndex + 1;
+                          const dateKey = formatDate(monthIndex, day);
+                          const isCompleted = habit.completions[dateKey] || false;
+                          
+                          return (
+                            <button
+                              key={day}
+                              onClick={() => onToggleHabit(habit.id, dateKey)}
+                              className={`
+                                w-3 h-3 border border-border transition-all duration-200 hover:scale-125
+                                ${isCompleted 
+                                  ? `${SECTION_GRID_COLORS[habit.section as keyof typeof SECTION_GRID_COLORS]} opacity-80` 
+                                  : 'bg-background hover:bg-muted'
+                                }
+                              `}
+                              title={`${habit.name} - ${MONTHS[monthIndex]} ${day}, ${currentYear}`}
+                            />
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ))}
                 </div>
               ))}
             </div>
-          </Card>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );
