@@ -52,6 +52,25 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
+				// Habit tracker theme colors
+				morning: {
+					DEFAULT: 'hsl(var(--morning))',
+					light: 'hsl(var(--morning-light))',
+					dark: 'hsl(var(--morning-dark))'
+				},
+				afternoon: {
+					DEFAULT: 'hsl(var(--afternoon))',
+					light: 'hsl(var(--afternoon-light))',
+					dark: 'hsl(var(--afternoon-dark))'
+				},
+				night: {
+					DEFAULT: 'hsl(var(--night))',
+					light: 'hsl(var(--night-light))',
+					dark: 'hsl(var(--night-dark))'
+				},
+				completed: 'hsl(var(--completed))',
+				partial: 'hsl(var(--partial))',
+				empty: 'hsl(var(--empty))',
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',
