@@ -1,4 +1,4 @@
-# AI Fitness Tracker
+# Habo
 
 An AI-powered fitness companion that helps you log workouts, track calories, and monitor macros with personalized insights to achieve your health goals efficiently.
 
