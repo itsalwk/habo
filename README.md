@@ -1,73 +1,67 @@
-# Welcome to your Lovable project
+# AI Fitness Tracker
 
-## Project info
+An AI-powered fitness companion that helps you log workouts, track calories, and monitor macros with personalized insights to achieve your health goals efficiently.
 
-**URL**: https://lovable.dev/projects/ad17d6f3-a651-4a53-b9c9-e3a9c1de5722
+## Features
 
-## How can I edit this code?
+- **Workout Logging:** Track exercises, sets, reps, and duration.  
+- **Calorie Tracking:** Log daily calorie intake and monitor progress.  
+- **Macros Monitoring:** Track proteins, carbs, and fats for optimized nutrition.  
+- **AI Insights:** Get personalized suggestions based on your activity and nutrition data.  
+- **Progress Analysis:** Visualize your performance over time with charts and summaries.  
 
-There are several ways of editing your application.
+## Tech Stack
 
-**Use Lovable**
+- **Frontend:** React Native (for cross-platform mobile apps)  
+- **Backend:** Django REST Framework or FastAPI (for APIs and user management)  
+- **Database:** PostgreSQL (production) / SQLite (development)  
+- **Authentication:** JWT (JSON Web Tokens)  
+- **AI & Data Processing:** Python, TensorFlow or PyTorch for AI-based insights  
+- **State Management (Frontend):** Redux or Recoil  
+- **Visualization:** Victory Native or Recharts (for charts and progress graphs)  
+- **Cloud / Hosting:** AWS Lambda / Google Cloud Functions (Serverless backend)  
+- **Storage:** AWS S3 or Firebase Storage (for profile images, workout logs)  
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/ad17d6f3-a651-4a53-b9c9-e3a9c1de5722) and start prompting.
+## Installation
 
-Changes made via Lovable will be committed automatically to this repo.
+1. Clone the repository:  
+   ```bash
+   git clone https://github.com/yourusername/ai-fitness-tracker.git
+   ```
 
-**Use your preferred IDE**
+2. Navigate to the project directory:
+   ```bash
+   cd ai-fitness-tracker
+   ```
+3. Install backend dependencies:
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+   ```bash
+   pip install -r requirements.txt
+   ```
+4. Install frontend dependencies:
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+   ```bash
+   npm install
+   ```
+5. Run the backend server:
 
-Follow these steps:
+   ```bash
+   python manage.py runserver
+   ```
+6. Run the React Native app:
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+   ```bash
+   npx react-native run-android  # or run-ios
+   ```
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+## Usage
 
-# Step 3: Install the necessary dependencies.
-npm i
+* Open the app and create an account.
+* Log your daily exercises and meals.
+* Track calories and macros.
+* View AI-generated insights and progress reports.
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+## Contributing
 
-**Edit a file directly in GitHub**
+Contributions are welcome! Please fork the repo and create a pull request.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/ad17d6f3-a651-4a53-b9c9-e3a9c1de5722) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
