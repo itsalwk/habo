@@ -1,11 +1,13 @@
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
 import { HabitGrid } from "@/components/HabitGrid";
 import { GoalCard } from "@/components/GoalCard";
 import { ProgressStats } from "@/components/ProgressStats";
 import { HabitManager } from "@/components/HabitManager";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Settings, TrendingUp } from "lucide-react";
+import { Moon, Sun, Settings, TrendingUp, Calendar, Target } from "lucide-react";
 
 interface Habit {
   id: string;
@@ -21,42 +23,43 @@ interface Goal {
 }
 
 const Index = () => {
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const [showManager, setShowManager] = useState(false);
   
-  // Sample data - in a real app this would come from a backend
+  // Minimalist sample data
   const [habits, setHabits] = useState<Habit[]>([
     {
       id: '1',
-      name: 'Arrange room',
-      section: 'morning',
-      completions: {
-        '2024-01-01': true,
-        '2024-01-02': true,
-        '2024-01-03': true,
-        '2024-01-04': false,
-        '2024-01-05': true,
-      }
-    },
-    {
-      id: '2', 
-      name: 'Brush room',
+      name: 'Meditation',
       section: 'morning',
       completions: {
         '2024-01-01': true,
         '2024-01-02': true,
         '2024-01-03': false,
         '2024-01-04': true,
+        '2024-01-05': true,
       }
     },
     {
-      id: '3',
-      name: 'Meditate',
-      section: 'morning', 
+      id: '2', 
+      name: 'Exercise',
+      section: 'morning',
       completions: {
         '2024-01-01': true,
         '2024-01-02': false,
         '2024-01-03': true,
         '2024-01-04': true,
+      }
+    },
+    {
+      id: '3',
+      name: 'Deep Work',
+      section: 'afternoon', 
+      completions: {
+        '2024-01-01': true,
+        '2024-01-02': true,
+        '2024-01-03': true,
+        '2024-01-04': false,
         '2024-01-05': true,
         '2024-01-06': true,
         '2024-01-07': true,
@@ -67,8 +70,8 @@ const Index = () => {
     },
     {
       id: '4',
-      name: 'Morning read',
-      section: 'morning',
+      name: 'Reading',
+      section: 'night',
       completions: {
         '2024-01-01': true,
         '2024-01-02': false,
@@ -83,95 +86,17 @@ const Index = () => {
     },
     {
       id: '5',
-      name: 'Breakfast',
-      section: 'morning',
-      completions: {
-        '2024-01-01': true,
-        '2024-01-02': true,
-        '2024-01-03': true,
-        '2024-01-04': false,
-        '2024-01-05': true,
-        '2024-01-06': true,
-        '2024-01-07': true,
-        '2024-01-08': false,
-      }
-    },
-    {
-      id: '6',
-      name: 'Brush teeth',
-      section: 'afternoon',
-      completions: {
-        '2024-01-01': true,
-        '2024-01-02': true,
-        '2024-01-03': true,
-        '2024-01-04': true,
-        '2024-01-05': false,
-        '2024-01-06': true,
-        '2024-01-07': true,
-        '2024-01-08': true,
-        '2024-01-09': false,
-      }
-    },
-    {
-      id: '7',
-      name: 'Extra studying',
-      section: 'afternoon',
-      completions: {
-        '2024-01-01': true,
-        '2024-01-02': false,
-        '2024-01-03': true,
-        '2024-01-04': true,
-        '2024-01-05': false,
-        '2024-01-06': true,
-        '2024-01-07': false,
-        '2024-01-08': true,
-      }
-    },
-    {
-      id: '8',
-      name: 'Workout',
-      section: 'afternoon',
-      completions: {
-        '2024-01-01': false,
-        '2024-01-02': true,
-        '2024-01-03': false,
-        '2024-01-04': true,
-        '2024-01-05': true,
-        '2024-01-06': false,
-        '2024-01-07': true,
-      }
-    },
-    {
-      id: '9',
-      name: 'Planning',
-      section: 'afternoon',
-      completions: {
-        '2024-01-01': true,
-        '2024-01-02': true,
-        '2024-01-03': false,
-        '2024-01-04': true,
-        '2024-01-05': true,
-        '2024-01-06': true,
-        '2024-01-07': false,
-        '2024-01-08': true,
-        '2024-01-09': true,
-      }
-    },
-    {
-      id: '10',
-      name: 'Night read',
+      name: 'Journaling',
       section: 'night',
       completions: {
         '2024-01-01': true,
-        '2024-01-02': false,
+        '2024-01-02': true,
         '2024-01-03': true,
         '2024-01-04': false,
         '2024-01-05': true,
         '2024-01-06': true,
         '2024-01-07': true,
         '2024-01-08': false,
-        '2024-01-09': true,
-        '2024-01-10': true,
       }
     }
   ]);
@@ -179,18 +104,18 @@ const Index = () => {
   const [goals, setGoals] = useState<Goal[]>([
     {
       id: '1',
-      title: 'Get clearer skin',
-      description: 'get a clearer skin and a consistent workout.'
+      title: 'Build Consistent Habits',
+      description: 'Establish a routine that supports long-term growth and well-being.'
     },
     {
       id: '2', 
-      title: 'Study goals',
-      description: 'study and get a higher gpa'
+      title: 'Read 24 Books',
+      description: 'Complete two books per month throughout the year.'
     },
     {
       id: '3',
-      title: 'Guitar practice',
-      description: 'get better at guitar'
+      title: 'Maintain 90% Completion',
+      description: 'Achieve a 90% habit completion rate across all tracked habits.'
     }
   ]);
 
@@ -238,71 +163,134 @@ const Index = () => {
     ));
   };
 
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Top Bar */}
-        <div className="flex justify-between items-center mb-8">
-          <div className="flex gap-2">
-            <Button
-              variant={showManager ? "default" : "outline"}
-              onClick={() => setShowManager(!showManager)}
-              size="sm"
-              className="flex items-center gap-2"
-            >
-              <Settings className="h-4 w-4" />
-              {showManager ? "Hide" : "Manage"} Habits
-            </Button>
-          </div>
-          
-          <Button variant="outline" size="sm" className="flex items-center gap-2">
-            <TrendingUp className="h-4 w-4" />
-            Stats
-          </Button>
-        </div>
+  const toggleTheme = () => {
+    setIsDarkMode(!isDarkMode);
+    document.documentElement.classList.toggle('dark');
+  };
 
-        {/* Progress Stats */}
-        <div className="mb-8">
-          <ProgressStats 
-            habits={habits} 
-            currentMonth={currentMonth}
-            currentYear={currentYear}
-          />
+  return (
+    <div className={`min-h-screen bg-background text-foreground transition-all duration-300`}>
+      {/* ChatGPT-inspired Header */}
+      <header className="border-b border-border bg-background/80 backdrop-blur-sm sticky top-0 z-10">
+        <div className="max-w-6xl mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                <Calendar className="w-4 h-4 text-primary-foreground" />
+              </div>
+              <div>
+                <h1 className="text-xl font-semibold text-foreground">Habo</h1>
+                <p className="text-xs text-muted-foreground">Advanced Habit Tracker</p>
+              </div>
+            </div>
+            
+            <div className="flex items-center space-x-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowManager(!showManager)}
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <Settings className="w-4 h-4 mr-2" />
+                {showManager ? "Hide" : "Manage"}
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={toggleTheme}
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
+                {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+              </Button>
+            </div>
+          </div>
         </div>
+      </header>
+
+      <div className="max-w-6xl mx-auto px-6 py-8 space-y-8">
+        {/* Progress Overview */}
+        <Card className="border-border bg-card">
+          <CardHeader className="pb-4">
+            <div className="flex items-center space-x-2">
+              <TrendingUp className="w-5 h-5 text-muted-foreground" />
+              <CardTitle className="text-lg font-medium">Progress Overview</CardTitle>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <ProgressStats 
+              habits={habits} 
+              currentMonth={currentMonth}
+              currentYear={currentYear}
+            />
+          </CardContent>
+        </Card>
 
         {/* Habit Manager */}
         {showManager && (
-          <div className="mb-8">
-            <HabitManager
-              habits={habits}
-              onAddHabit={handleAddHabit}
-              onDeleteHabit={handleDeleteHabit}
-              onUpdateHabit={handleUpdateHabit}
-            />
-          </div>
+          <Card className="border-border bg-card">
+            <CardHeader>
+              <CardTitle className="text-lg font-medium">Habit Management</CardTitle>
+              <p className="text-sm text-muted-foreground">Add, edit, or remove your daily habits</p>
+            </CardHeader>
+            <CardContent>
+              <HabitManager
+                habits={habits}
+                onAddHabit={handleAddHabit}
+                onDeleteHabit={handleDeleteHabit}
+                onUpdateHabit={handleUpdateHabit}
+              />
+            </CardContent>
+          </Card>
         )}
 
         {/* Main Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Habit Grid - Takes up 3 columns */}
           <div className="lg:col-span-3">
-            <HabitGrid 
-              habits={habits}
-              onToggleHabit={handleToggleHabit}
-            />
+            <Card className="border-border bg-card">
+              <CardHeader className="pb-4">
+                <CardTitle className="text-lg font-medium">Daily Habits</CardTitle>
+                <p className="text-sm text-muted-foreground">
+                  Track your progress with our minimalist, year-long view
+                </p>
+              </CardHeader>
+              <CardContent>
+                <HabitGrid 
+                  habits={habits}
+                  onToggleHabit={handleToggleHabit}
+                />
+              </CardContent>
+            </Card>
           </div>
 
           {/* Goals Section - Takes up 1 column */}
-          <div className="space-y-4">
-            {goals.map(goal => (
-              <GoalCard
-                key={goal.id}
-                goal={goal}
-                onUpdate={handleUpdateGoal}
-              />
-            ))}
+          <div className="space-y-6">
+            <div className="flex items-center space-x-2">
+              <Target className="w-5 h-5 text-muted-foreground" />
+              <h2 className="text-lg font-medium">Personal Goals</h2>
+            </div>
+            
+            <div className="space-y-4">
+              {goals.map((goal) => (
+                <GoalCard
+                  key={goal.id}
+                  goal={goal}
+                  onUpdate={handleUpdateGoal}
+                />
+              ))}
+            </div>
           </div>
         </div>
+
+        {/* Motivational Section - ChatGPT style */}
+        <Card className="bg-primary text-primary-foreground border-0">
+          <CardContent className="py-8 text-center">
+            <p className="text-lg font-medium mb-2">
+              "The secret of getting ahead is getting started."
+            </p>
+            <p className="text-sm opacity-75">— Mark Twain</p>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

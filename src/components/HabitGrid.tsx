@@ -6,7 +6,7 @@ interface Habit {
   id: string;
   name: string;
   section: 'morning' | 'afternoon' | 'night';
-  completions: Record<string, boolean>; // date -> completed
+  completions: Record<string, boolean>;
 }
 
 interface HabitGridProps {
@@ -20,21 +20,9 @@ const MONTHS = [
 ];
 
 const SECTION_ICONS = {
-  morning: '☀️',
-  afternoon: '🌸', 
-  night: '🌙'
-};
-
-const SECTION_COLORS = {
-  morning: 'bg-morning-light',
-  afternoon: 'bg-afternoon-light',
-  night: 'bg-night-light'
-};
-
-const SECTION_GRID_COLORS = {
-  morning: 'bg-morning',
-  afternoon: 'bg-afternoon',
-  night: 'bg-night'
+  morning: '○',
+  afternoon: '●', 
+  night: '◐'
 };
 
 export function HabitGrid({ habits, onToggleHabit }: HabitGridProps) {
@@ -61,10 +49,10 @@ export function HabitGrid({ habits, onToggleHabit }: HabitGridProps) {
   }, {} as Record<string, Habit[]>);
 
   return (
-    <div className="w-full max-w-full mx-auto p-6 bg-background">
+    <div className="w-full max-w-full">
       {/* Header */}
       <div className="text-center mb-8">
-        <h1 className="text-5xl font-bold tracking-wider text-foreground mb-6 font-serif">
+        <h1 className="text-4xl font-bold text-foreground mb-6 tracking-wide">
           HABITS
         </h1>
         
@@ -74,18 +62,18 @@ export function HabitGrid({ habits, onToggleHabit }: HabitGridProps) {
             variant="ghost" 
             size="sm"
             onClick={() => navigateYear('prev')}
-            className="h-8 w-8 p-0"
+            className="h-8 w-8 p-0 hover:bg-muted"
           >
             <ChevronLeft className="h-4 w-4" />
           </Button>
           
-          <span className="text-2xl font-bold text-primary px-6">{currentYear}</span>
+          <span className="text-2xl font-bold text-foreground px-6">{currentYear}</span>
           
           <Button 
             variant="ghost" 
             size="sm"
             onClick={() => navigateYear('next')}
-            className="h-8 w-8 p-0"
+            className="h-8 w-8 p-0 hover:bg-muted"
           >
             <ChevronRight className="h-4 w-4" />
           </Button>
@@ -97,7 +85,7 @@ export function HabitGrid({ habits, onToggleHabit }: HabitGridProps) {
         <div className="min-w-[1200px]">
           <div className="grid grid-cols-[200px_repeat(12,_1fr)] gap-px bg-border border border-border">
             <div className="bg-background p-2"></div>
-            {MONTHS.map((month, index) => (
+            {MONTHS.map((month) => (
               <div key={month} className="bg-background p-2 text-center text-sm font-medium text-foreground border-r border-border">
                 {month}
               </div>
@@ -130,12 +118,12 @@ export function HabitGrid({ habits, onToggleHabit }: HabitGridProps) {
             <div key={section} className="border-t-2 border-border">
               {/* Section Header */}
               <div className="grid grid-cols-[200px_repeat(12,_1fr)] gap-px bg-border">
-                <div className={`${SECTION_COLORS[section as keyof typeof SECTION_COLORS]} p-3 flex items-center gap-2 border-r border-border`}>
-                  <span className="text-lg">{SECTION_ICONS[section as keyof typeof SECTION_ICONS]}</span>
-                  <span className="text-sm font-medium text-foreground">{section}.</span>
+                <div className={`bg-${section} p-3 flex items-center gap-2 border-r border-border`}>
+                  <span className="text-lg text-foreground">{SECTION_ICONS[section as keyof typeof SECTION_ICONS]}</span>
+                  <span className="text-sm font-medium text-foreground capitalize">{section}</span>
                 </div>
                 {MONTHS.map((_, monthIndex) => (
-                  <div key={monthIndex} className={`${SECTION_COLORS[section as keyof typeof SECTION_COLORS]} border-r border-border`}></div>
+                  <div key={monthIndex} className={`bg-${section} border-r border-border`}></div>
                 ))}
               </div>
               
@@ -158,10 +146,10 @@ export function HabitGrid({ habits, onToggleHabit }: HabitGridProps) {
                               key={day}
                               onClick={() => onToggleHabit(habit.id, dateKey)}
                               className={`
-                                w-3 h-3 border border-border transition-all duration-200 hover:scale-125
+                                w-3 h-3 border border-border transition-all duration-200 hover:scale-110
                                 ${isCompleted 
-                                  ? `${SECTION_GRID_COLORS[habit.section as keyof typeof SECTION_GRID_COLORS]} opacity-80` 
-                                  : 'bg-background hover:bg-muted'
+                                  ? 'bg-habit-completed border-habit-completed' 
+                                  : 'bg-habit-empty hover:bg-habit-partial'
                                 }
                               `}
                               title={`${habit.name} - ${MONTHS[monthIndex]} ${day}, ${currentYear}`}
